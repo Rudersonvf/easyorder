@@ -1,12 +1,14 @@
 package br.com.ruderson.easyorder.dto.product;
 
+import java.math.BigDecimal;
+
 import java.time.LocalDateTime;
 
 public record ProductResponse(
     Long id,
     String name,
     String description,
-    Double price,
+    BigDecimal price,
     String imageUrl,
     LocalDateTime updatedAt
 ) {

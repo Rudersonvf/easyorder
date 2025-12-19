@@ -1,5 +1,7 @@
 package br.com.ruderson.easyorder.domain;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -27,7 +29,7 @@ public class OrderItem {
 
     private Integer quantity;
     
-    private Double unitPrice;
+    private BigDecimal unitPrice;
 
     @Column(columnDefinition = "TEXT")
     private String observations;

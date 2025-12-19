@@ -1,9 +1,13 @@
 package br.com.ruderson.easyorder.domain;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import org.springframework.data.annotation.Transient;
 
 import br.com.ruderson.easyorder.domain.enums.OrderStatus;
 import jakarta.persistence.Column;
@@ -67,6 +71,20 @@ public class Order {
         if (openedAt == null) {
             openedAt = LocalDateTime.now();
         }
+    }
+
+    @Transient
+    public BigDecimal getTotalAmount() {
+        if (items == null) {
+            return BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
+        }
+
+        BigDecimal total = items.stream()
+                .filter(i -> i.getQuantity() != null && i.getUnitPrice() != null)
+                .map(i -> i.getUnitPrice().multiply(BigDecimal.valueOf(i.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        return total.setScale(2, RoundingMode.HALF_UP);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package br.com.ruderson.easyorder.domain;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
@@ -37,7 +38,7 @@ public class Product {
 
     private String description;
 
-    private Double price;
+    private BigDecimal price;
 
     private String imageUrl;
 

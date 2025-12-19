@@ -2,15 +2,14 @@ package br.com.ruderson.easyorder.domain;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -22,38 +21,47 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "products")
+@Table(name = "stores")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Product {
+public class Store {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
+    @Column(nullable = false)
     private String name;
 
-    private String description;
+    @Column(unique = true, nullable = false)
+    private String slug;
 
-    private Double price;
+    private String cnpj;
 
-    private String imageUrl;
-
-    private Boolean isActive;
+    @Column(nullable = false)
+    private Boolean active;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "store_id", nullable = false)
+    @OneToMany(mappedBy = "store")
     @ToString.Exclude
-    private Store store;
+    private Set<Product> products = new HashSet<>();
 
-    @OneToMany(mappedBy = "product")
-    private Set<OrderItem> orderItems = new HashSet<>();
+    @OneToMany(mappedBy = "store")
+    @ToString.Exclude
+    private Set<Order> orders = new HashSet<>();
+
+    @OneToMany(mappedBy = "store")
+    @ToString.Exclude
+    private Set<Customer> customers = new HashSet<>();
+
+    @OneToMany(mappedBy = "store")
+    @ToString.Exclude
+    private Set<User> users = new HashSet<>();
 
     @PrePersist
     public void onCreate() {
@@ -72,10 +80,10 @@ public class Product {
             return true;
         if (o == null || getClass() != o.getClass())
             return false;
-        Product product = (Product) o;
-        if (id == null || product.id == null)
+        Store other = (Store) o;
+        if (id == null || other.id == null)
             return false;
-        return Objects.equals(id, product.id);
+        return id.equals(other.id);
     }
 
     @Override

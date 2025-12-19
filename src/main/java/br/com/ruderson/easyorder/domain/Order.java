@@ -54,6 +54,11 @@ public class Order {
     @ToString.Exclude
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "store_id", nullable = false)
+    @ToString.Exclude
+    private Store store;
+
     @PrePersist
     public void onCreate() {
         if (status == null) {

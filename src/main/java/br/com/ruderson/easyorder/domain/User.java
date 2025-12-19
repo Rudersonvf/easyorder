@@ -15,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,11 @@ public class User implements UserDetails {
     private String lastName;
     private String email;
     private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "store_id", nullable = false)
+    @ToString.Exclude
+    private Store store;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

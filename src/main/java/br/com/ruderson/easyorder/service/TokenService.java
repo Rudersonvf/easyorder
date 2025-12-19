@@ -38,6 +38,7 @@ public class TokenService {
                 .claim("scope", scopes)
                 .claim("sid", sid.toString())
                 .claim("userId", user.getId().toString())
+                .claim("storeId", user.getStore().getId().toString())
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

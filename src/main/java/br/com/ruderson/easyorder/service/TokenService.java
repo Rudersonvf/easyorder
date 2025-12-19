@@ -37,6 +37,7 @@ public class TokenService {
                 .expiresAt(now.plusSeconds(ACCESS_TOKEN_EXPIRATION_SECONDS))
                 .claim("scope", scopes)
                 .claim("sid", sid.toString())
+                .claim("userId", user.getId().toString())
                 .build();
 
         return jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();

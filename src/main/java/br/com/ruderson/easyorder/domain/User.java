@@ -35,10 +35,18 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     private String password;
+
+    //private String imgUrl;
+
+    //private Boolean active;
 
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)

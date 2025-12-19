@@ -40,6 +40,8 @@ public class Store {
 
     private String cnpj;
 
+    //private String imageUrl;
+
     @Column(nullable = false)
     private Boolean active;
 

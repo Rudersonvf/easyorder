@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.ruderson.easyorder.domain.enums.OrderStatus;
 import br.com.ruderson.easyorder.dto.order.OrderDetailsResponse;
+import br.com.ruderson.easyorder.dto.order.OrderItemRequest;
 import br.com.ruderson.easyorder.dto.order.OrderRequest;
 import br.com.ruderson.easyorder.dto.order.OrderResponse;
 import br.com.ruderson.easyorder.service.OrderService;
@@ -65,5 +67,49 @@ public class OrderController {
         		.buildAndExpand(orderResponse.id())
         		.toUri()
         ).body(orderResponse);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<OrderResponse> addProductsToOrder(
+        @AuthenticationPrincipal Jwt jwt,
+        @PathVariable Long id,
+        @RequestBody OrderItemRequest orderItemRequest 
+    ) {
+        UUID storeId = UUID.fromString(jwt.getClaimAsString("storeId"));
+        OrderResponse orderResponse = orderService.addProductsToOrder(storeId, id, orderItemRequest);
+        return ResponseEntity.ok(orderResponse);
+    }
+
+    @DeleteMapping("/{id}/items/{productId}")
+    public ResponseEntity<OrderResponse> removeProductFromOrder(
+        @AuthenticationPrincipal Jwt jwt,
+        @PathVariable Long id,
+        @PathVariable Long productId
+    ) {
+        UUID storeId = UUID.fromString(jwt.getClaimAsString("storeId"));
+        OrderResponse orderResponse = orderService.removeProductFromOrder(storeId, id, productId);
+        return ResponseEntity.ok(orderResponse);
+    }
+
+    @PostMapping("/{id}/items/{productId}/increment")
+    public ResponseEntity<OrderResponse> incrementProductQuantity(
+        @AuthenticationPrincipal Jwt jwt,
+        @PathVariable Long id,
+        @PathVariable Long productId
+    ) {
+        UUID storeId = UUID.fromString(jwt.getClaimAsString("storeId"));
+        OrderResponse orderResponse = orderService.incrementProductQuantity(storeId, id, productId);
+        return ResponseEntity.ok(orderResponse);
+    }
+
+    @PostMapping("/{id}/items/{productId}/decrement")
+    public ResponseEntity<OrderResponse> decrementProductQuantity(
+        @AuthenticationPrincipal Jwt jwt,
+        @PathVariable Long id,
+        @PathVariable Long productId
+    ) {
+        UUID storeId = UUID.fromString(jwt.getClaimAsString("storeId"));
+        OrderResponse orderResponse = orderService.decrementProductQuantity(storeId, id, productId);
+        return ResponseEntity.ok(orderResponse);
     }
 }

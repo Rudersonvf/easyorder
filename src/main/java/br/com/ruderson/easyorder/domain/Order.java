@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.data.annotation.Transient;
 
 import br.com.ruderson.easyorder.domain.enums.OrderStatus;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -49,7 +50,7 @@ public class Order {
 
     private LocalDateTime closedAt;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private Set<OrderItem> items = new HashSet<>();
 

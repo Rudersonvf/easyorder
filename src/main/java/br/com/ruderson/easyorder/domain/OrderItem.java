@@ -2,6 +2,8 @@ package br.com.ruderson.easyorder.domain;
 
 import java.math.BigDecimal;
 
+import org.springframework.data.annotation.Transient;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -45,6 +47,11 @@ public class OrderItem {
     @JoinColumn(name = "product_id")
     @ToString.Exclude
     private Product product;
+
+    @Transient
+    public BigDecimal getSubtotal() {
+        return BigDecimal.valueOf(quantity).multiply(unitPrice);
+    }
 
     @Override
     public boolean equals(Object o) {

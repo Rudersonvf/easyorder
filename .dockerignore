@@ -1,7 +1,6 @@
 .git
 .vscode
 .idea
-target
-**/target
+!target/*.jar
 .mvn/wrapper/maven-wrapper.jar
 README.md
